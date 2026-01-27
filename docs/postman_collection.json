@@ -1,0 +1,277 @@
+{
+  "info": {
+    "name": "TECMADE - SITRAC API",
+    "description": "Colección de endpoints para la API de stock",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Guardar el token en la variable de colección",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"token\", jsonData.token);",
+              "    console.log(\"Token guardado: \" + jsonData.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"admin@tecmade.com\",\n    \"password\": \"admin123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/login",
+          "host": ["{{base_url}}"],
+          "path": ["api", "login"]
+        },
+        "description": "Login de usuario para obtener token de autenticación"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Obtener Stock",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/stock",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock"]
+        },
+        "description": "Obtiene el listado completo de artículos en stock"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Movimiento - Agregar Stock",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"articulo\": \"Tornillo M8x20\",\n    \"delta\": 10\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/stock/movimiento",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock", "movimiento"]
+        },
+        "description": "Agrega 10 unidades al stock de un artículo existente"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Movimiento - Reducir Stock",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"articulo\": \"Tornillo M8x20\",\n    \"delta\": -5\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/stock/movimiento",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock", "movimiento"]
+        },
+        "description": "Reduce 5 unidades del stock de un artículo existente"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Movimiento - Crear Artículo Nuevo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"articulo\": \"Artículo Nuevo XYZ\",\n    \"delta\": 25\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/stock/movimiento",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock", "movimiento"]
+        },
+        "description": "Crea un nuevo artículo con cantidad inicial de 25"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Movimiento - Eliminar Artículo (llegar a 0)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"articulo\": \"Grasa lubricante (tubos)\",\n    \"delta\": -30\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/stock/movimiento",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock", "movimiento"]
+        },
+        "description": "Reduce la cantidad a 0, eliminando el artículo del stock"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Error - Login Inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"wrong@tecmade.com\",\n    \"password\": \"wrongpassword\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/login",
+          "host": ["{{base_url}}"],
+          "path": ["api", "login"]
+        },
+        "description": "Prueba de login con credenciales incorrectas (debe retornar 401)"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Error - Sin Token",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/stock",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock"]
+        },
+        "description": "Intenta obtener stock sin proporcionar token (debe retornar 401)"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Error - Token Inválido",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer token_invalido_123",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/stock",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock"]
+        },
+        "description": "Intenta obtener stock con token inválido (debe retornar 401)"
+      },
+      "response": []
+    },
+    {
+      "name": "10. Error - Cantidad Negativa",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"articulo\": \"Tornillo M8x20\",\n    \"delta\": -999999\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/stock/movimiento",
+          "host": ["{{base_url}}"],
+          "path": ["api", "stock", "movimiento"]
+        },
+        "description": "Intenta reducir más de lo disponible (debe retornar 400)"
+      },
+      "response": []
+    }
+  ]
+}
