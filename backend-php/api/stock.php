@@ -5,7 +5,7 @@
  * @author Alex
  */
 
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 // Solo aceptar GET
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {

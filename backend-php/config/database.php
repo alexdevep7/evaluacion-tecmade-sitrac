@@ -1,18 +1,23 @@
 <?php
 /**
- * TECMADE - SITRAC: Configuración de Base de Datos
+ * TECMADE - SITRAC: Configuración de Base de Datos - EJEMPLO
  * @author Alex
+ * 
+ * IMPORTANTE: 
+ * 1. Copiar este archivo como database.php
+ * 2. Modificar las credenciales con tus datos reales
+ * 3. El archivo database.php NO se subirá a Git (está en .gitignore)
  */
 
 // Configuración de base de datos
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'tecmade_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');  // Cambiar según tu configuración
+define('DB_USER', 'root');           // ← Cambiar
+define('DB_PASS', 'root');          // ← Cambiar
 define('DB_CHARSET', 'utf8mb4');
 
 // Configuración de JWT/Token
-define('JWT_SECRET', 'tecmade_secret_key_2024');  // Cambiar en producción
+define('JWT_SECRET', 'GENERAR_CLAVE_SECRETA_AQUI');  // ← Cambiar en producción
 define('TOKEN_EXPIRATION', 3600); // 1 hora en segundos
 
 // Configuración de API
@@ -24,7 +29,7 @@ define('API_VERSION', 'v1');
  */
 function getDBConnection() {
     try {
-        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+        $dsn = "mysql:host=" . DB_HOST . ";port=8889;dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
