@@ -336,7 +336,7 @@ La aplicación detecta automáticamente el tamaño de pantalla y se adapta:
 
 ## 🗄️ MySQL Avanzado
 
-### Sistema de Embalado (2 puntos)
+### Sistema de Embalado
 
 Sistema completo para gestión de series y bultos con estructura recursiva.
 
@@ -398,7 +398,7 @@ CALL ObtenerJerarquiaBultos(1);
 
 ---
 
-### Sistema de Orders/Links (2 puntos)
+### Sistema de Orders/Links
 
 Sistema de órdenes enlazadas que permite vincular órdenes en secuencias.
 
@@ -418,7 +418,7 @@ Sistema de órdenes enlazadas que permite vincular órdenes en secuencias.
 3. `FinalOrders` (view) - Órdenes finales (sin orden siguiente)
 4. `OrphanOrders` (view) - Órdenes huérfanas (sin enlaces)
 
-**Consulta adicional (bonus):**
+**Consulta adicional (extra):**
 
 - `GetAllChains()` - Ver todas las cadenas de órdenes con recursión (CTE)
 
