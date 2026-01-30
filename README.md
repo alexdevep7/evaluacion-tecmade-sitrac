@@ -1,6 +1,6 @@
 # Evaluación Técnica TECMADE - SITRAC
 
-## Desarrollador Android - Alex
+## Desarrollador Android - Alfredo Castillo
 
 ### 📋 Descripción
 
@@ -41,9 +41,19 @@ evaluacion-tecmade-sitrac/
 
 ### Prerequisitos
 
+**Para desarrollo en macOS:**
+
 - PHP 8.3 o superior
 - MySQL 8.0 o superior
-- MAMP (para desarrollo local en Mac)
+- MAMP (para desarrollo local)
+- Android Studio Otter (2025.2.3) o superior
+- JDK 17 o superior
+
+**Para desarrollo en Windows:**
+
+- PHP 8.3 o superior
+- MySQL 8.0 o superior
+- XAMPP o WAMP (para desarrollo local)
 - Android Studio Otter (2025.2.3) o superior
 - JDK 17 o superior
 
@@ -53,7 +63,7 @@ evaluacion-tecmade-sitrac/
 
 ### 1. Configurar Base de Datos
 
-#### Opción A: Usando MySQL desde terminal
+#### Opción A: Usando MySQL desde terminal (macOS/Linux)
 
 ```bash
 # Importar esquema y datos
@@ -65,16 +75,41 @@ mysql -u root -p < database/embalado.sql
 mysql -u root -p < database/orders.sql
 ```
 
-#### Opción B: Usando MAMP
+#### Opción B: Usando XAMPP/WAMP (Windows)
+
+```powershell
+# Iniciar XAMPP/WAMP
+# Abrir phpMyAdmin: http://localhost/phpMyAdmin/
+
+# Importar manualmente los archivos .sql desde la interfaz
+# O desde PowerShell/CMD:
+cd C:\xampp\mysql\bin
+.\mysql.exe -u root < ruta\al\proyecto\database\schema.sql
+.\mysql.exe -u root < ruta\al\proyecto\database\seed.sql
+.\mysql.exe -u root < ruta\al\proyecto\database\embalado.sql
+.\mysql.exe -u root < ruta\al\proyecto\database\orders.sql
+```
+
+**Nota:** En XAMPP por defecto no hay contraseña para root. Si te pide contraseña, omite el parámetro `-p`.
+
+#### Opción C: Usando MAMP (macOS)
 
 ```bash
 # Iniciar MAMP
 open /Applications/MAMP/MAMP.app
 
 # Click en "Start Servers"
-# Abrir phpMyAdmin: http://localhost:8888/phpMyAdmin/
+# Desde MySQL client:
+/Applications/MAMP/Library/bin/mysql -u root -proot tecmade_db
+```
 
-# Importar manualmente los archivos .sql
+Luego dentro de MySQL:
+
+```sql
+source database/schema.sql
+source database/seed.sql
+source database/embalado.sql
+source database/orders.sql
 ```
 
 ### 2. Configurar credenciales
@@ -85,20 +120,38 @@ Editar `backend-php/config/database.php`:
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'tecmade_db');
 define('DB_USER', 'root');
-define('DB_PASS', 'root');  // o tu contraseña
+define('DB_PASS', 'root');  // MAMP: 'root' | XAMPP: '' (vacío) | Ajustar según tu configuración
 ```
 
 ### 3. Levantar servidor
 
-**IMPORTANTE:** Usar `0.0.0.0:8000` para que funcione con emulador Android:
+**IMPORTANTE:** Usar `0.0.0.0:8000` para que funcione con emulador Android.
+
+#### macOS (MAMP):
 
 ```bash
 cd backend-php
-
-# Para MAMP (Mac)
 /Applications/MAMP/bin/php/php8.3.28/bin/php -S 0.0.0.0:8000 index.php
+```
 
-# Para PHP estándar
+#### Windows (XAMPP):
+
+```cmd
+cd backend-php
+C:\xampp\php\php.exe -S 0.0.0.0:8000 index.php
+```
+
+#### Windows (WAMP):
+
+```cmd
+cd backend-php
+C:\wamp64\bin\php\php8.3.x\php.exe -S 0.0.0.0:8000 index.php
+```
+
+#### PHP estándar (cualquier OS):
+
+```bash
+cd backend-php
 php -S 0.0.0.0:8000 index.php
 ```
 
@@ -106,14 +159,30 @@ php -S 0.0.0.0:8000 index.php
 
 ### 4. Verificar funcionamiento
 
+#### macOS/Linux:
+
 ```bash
-# Test de login
 curl -X POST http://localhost:8000/api/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@tecmade.com","password":"admin123"}'
-
-# Deberías recibir un token
 ```
+
+#### Windows (PowerShell):
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8000/api/login" `
+  -Method POST `
+  -Headers @{"Content-Type"="application/json"} `
+  -Body '{"email":"admin@tecmade.com","password":"admin123"}'
+```
+
+#### Windows (CMD) o usar Postman (recomendado):
+
+```cmd
+curl -X POST http://localhost:8000/api/login -H "Content-Type: application/json" -d "{\"email\":\"admin@tecmade.com\",\"password\":\"admin123\"}"
+```
+
+Deberías recibir un token en la respuesta.
 
 ---
 
@@ -138,17 +207,42 @@ private const val BASE_URL = "http://10.0.2.2:8000/"
 
 **Para obtener tu IP local:**
 
+#### macOS/Linux:
+
 ```bash
 ifconfig | grep "inet " | grep -v 127.0.0.1
 ```
+
+#### Windows (CMD):
+
+```cmd
+ipconfig | findstr IPv4
+```
+
+#### Windows (PowerShell):
+
+```powershell
+Get-NetIPAddress -AddressFamily IPv4 | Where-Object {$_.IPAddress -like "192.168.*"}
+```
+
+Busca una IP que comience con `192.168.` o `10.0.`
 
 ### 3. Levantar Backend
 
 Antes de ejecutar la app, asegúrate que el backend esté corriendo:
 
+#### macOS:
+
 ```bash
 cd backend-php
 /Applications/MAMP/bin/php/php8.3.28/bin/php -S 0.0.0.0:8000 index.php
+```
+
+#### Windows:
+
+```cmd
+cd backend-php
+C:\xampp\php\php.exe -S 0.0.0.0:8000 index.php
 ```
 
 ### 4. Ejecutar App
@@ -436,6 +530,8 @@ Authorization: Bearer {token}
 
 ### Testing con cURL
 
+#### macOS/Linux:
+
 ```bash
 # 1. Login
 TOKEN=$(curl -s -X POST http://localhost:8000/api/login \
@@ -460,22 +556,48 @@ curl -X POST http://localhost:8000/api/stock/movimiento \
   -d '{"articulo":"Producto A","delta":-5}'
 ```
 
+#### Windows (PowerShell):
+
+```powershell
+# 1. Login
+$response = Invoke-RestMethod -Uri "http://localhost:8000/api/login" -Method POST -Headers @{"Content-Type"="application/json"} -Body '{"email":"admin@tecmade.com","password":"admin123"}'
+$token = $response.token
+
+# 2. Obtener stock
+Invoke-RestMethod -Uri "http://localhost:8000/api/stock" -Method GET -Headers @{"Authorization"="Bearer $token"}
+
+# 3. Agregar 10 unidades
+Invoke-RestMethod -Uri "http://localhost:8000/api/stock/movimiento" -Method POST -Headers @{"Authorization"="Bearer $token";"Content-Type"="application/json"} -Body '{"articulo":"Producto A","delta":10}'
+```
+
 ### Testing MySQL Avanzado
 
-```sql
--- Conectar a MySQL
-mysql -u root -proot tecmade_db
+#### macOS (MAMP):
 
--- Probar sistema de embalado
+```bash
+# Conectar a MySQL
+/Applications/MAMP/Library/bin/mysql -u root -proot tecmade_db
+
+# Probar sistema de embalado
 CALL CrearSerie('Test Serie', @id, @codigo);
 CALL CrearBulto('Test Bulto', @id_b, @etiqueta);
 CALL AsignarSerieABulto(@id, @id_b);
 CALL ObtenerSeriesEnBulto(@id_b);
 
--- Probar sistema de órdenes
+# Probar sistema de órdenes
 CALL GetPrevNextOrder('ORD-003');
 SELECT * FROM InitialOrders;
 SELECT * FROM FinalOrders;
+```
+
+#### Windows (XAMPP):
+
+```cmd
+# Conectar a MySQL
+cd C:\xampp\mysql\bin
+mysql.exe -u root tecmade_db
+
+# Luego ejecutar los mismos comandos SQL
 ```
 
 ---
@@ -606,7 +728,7 @@ Data Layer:
 
 ## 👨‍💻 Autor
 
-**Alex** - Desarrollador Android  
+**Alfredo Castillo** - Desarrollador Android  
 Evaluación técnica para TECMADE S.A. - SITRAC  
 Enero 2026
 
