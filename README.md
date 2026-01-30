@@ -271,13 +271,50 @@ C:\xampp\php\php.exe -S 0.0.0.0:8000 index.php
 
 ### Stack Tecnológico
 
-- **Lenguaje:** Kotlin 2.1.0
-- **UI:** Jetpack Compose + Material 3
-- **Networking:** Retrofit 2.11.0 + OkHttp 5.3.2
-- **Persistencia:** DataStore Preferences 1.2.0
-- **Navegación:** Navigation Compose 2.9.6
-- **Async:** Coroutines 1.10.2 + Flow
-- **Arquitectura:** MVVM + Clean Architecture + Repository Pattern
+**Lenguaje y Build:**
+
+- **Kotlin:** 2.3.0
+- **Android Gradle Plugin:** 9.0.0
+- **Compile SDK:** 36
+- **Min SDK:** 24 (Android 7.0)
+- **Target SDK:** 36
+- **Java Version:** 11
+
+**UI y Compose:**
+
+- **Jetpack Compose BOM:** 2026.01.00
+- **Material 3:** (desde BOM)
+- **Material Icons Extended:** (desde BOM)
+- **Activity Compose:** 1.12.2
+
+**Networking:**
+
+- **Retrofit:** 3.0.0
+- **Gson Converter:** 3.0.0
+- **OkHttp Logging Interceptor:** 5.3.2
+
+**Persistencia:**
+
+- **DataStore Preferences:** 1.2.0
+
+**Navegación:**
+
+- **Navigation Compose:** 2.9.6
+
+**Lifecycle y Architecture:**
+
+- **Lifecycle Runtime KTX:** 2.10.0
+- **ViewModel Compose:** 2.10.0
+- **Lifecycle Runtime Compose:** 2.10.0
+- **Core KTX:** 1.17.0
+
+**Asíncrono:**
+
+- **Coroutines Android:** 1.10.2
+
+**Patrón de Arquitectura:**
+
+- MVVM + Clean Architecture + Repository Pattern
 
 ### Soporte para Tablets
 
