@@ -11,6 +11,7 @@ object RetrofitInstance {
     // IMPORTANTE: Cambiar según tu configuración
     // Para emulador: http://10.0.2.2:8000/
     // Para dispositivo físico: http://TU_IP_LOCAL:8000/
+
     private const val BASE_URL = "http://10.0.2.2:8000/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {

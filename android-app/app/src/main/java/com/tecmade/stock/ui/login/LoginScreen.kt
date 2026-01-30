@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -22,9 +23,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
+fun isTablet(): Boolean {
+    val configuration = LocalConfiguration.current
+    return configuration.screenWidthDp >= 600 // este warning puede ser ignorado
+}
+
+@Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit
-){
+) {
     val application = (LocalContext.current.applicationContext as Application)
     val viewModel: LoginViewModel = viewModel(
         factory = object : androidx.lifecycle.ViewModelProvider.Factory {
@@ -36,6 +43,7 @@ fun LoginScreen(
     )
 
     val uiState by viewModel.uiState.collectAsState()
+    val isTablet = isTablet()
 
     var email by remember { mutableStateOf("admin@tecmade.com") }
     var password by remember { mutableStateOf("admin123") }
@@ -51,9 +59,19 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        contentAlignment = Alignment.BottomCenter
+        contentAlignment = Alignment.Center
     ) {
         Column(
+            modifier = Modifier
+                .then(
+                    if (isTablet) {
+                        // En tablet, limitar el ancho a 500dp
+                        Modifier.widthIn(max = 500.dp)
+                    } else {
+                        // En phone, usar todo el ancho
+                        Modifier.fillMaxWidth()
+                    }
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -105,8 +123,8 @@ fun LoginScreen(
 
                             val description = if (passwordVisible) "Hide password" else "Show password"
 
-                            IconButton(onClick = {passwordVisible = !passwordVisible}){
-                                Icon(imageVector  = image, description)
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(imageVector = image, description)
                             }
                         }
                     )
